@@ -13,7 +13,6 @@ class RegisterForm extends AsyncForm {
   onSubmit(data) {    
     User.register(data, (error, response) => {
       if (error) {
-        console.error('Ошибка регистрации', error);
         alert('Ошибка сети');
         return;
       }
@@ -25,7 +24,6 @@ class RegisterForm extends AsyncForm {
         App.getModal('register').close();
         
       } else {
-        console.error(response.error);
         alert(response.error || 'Произошла ошибка при регистрации');
       };
     });

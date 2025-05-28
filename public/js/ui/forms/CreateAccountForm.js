@@ -12,7 +12,6 @@ class CreateAccountForm extends AsyncForm {
   onSubmit(data) {
     Account.create(data, (error, response) => {
       if (error) {
-        console.error('Ошибка сети: ', error);
         alert('Ошибка сети');
         return;
       }
@@ -22,7 +21,6 @@ class CreateAccountForm extends AsyncForm {
         App.update();
         this.element.reset();
       } else {
-        console.error(response.error);
         alert(response.error || 'Не получилось создать аккаунт:');
       };
     });

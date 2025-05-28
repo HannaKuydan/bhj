@@ -33,9 +33,7 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
-    const buttonAccountRemove = this.element.querySelector('.remove-account');
-    
-    buttonAccountRemove.addEventListener('click', () =>{
+    this.element.querySelector('.remove-account').addEventListener('click', () =>{
       this.removeAccount();
     });
 
@@ -60,18 +58,13 @@ class TransactionsPage {
   removeAccount() {
     if (!this.lastOptions) {
       return;
-    }
-    const confirmation = confirm('Вы действительно хотите удалить аккаунт?');
-    if (confirmation) {
-      Account.remove({ id: this.lastOptions.account_id }, (error, response) => {
-        if (error) {
-          console.error('Ошибка удаления аккаунта: ', error);
-          return;
-        }
-        if (response.success) {
+    };
+    if (confirm('Вы действительно хотите удалить аккаунт?')) {
+      Account.remove({ id: this.lastOptions.account_id },  (err,response) => {
+        if (response?.success) {
+          this.clear();
           App.updateWidgets();
           App.updateForms();
-          this.clear();
         };
       });
     };
@@ -84,15 +77,10 @@ class TransactionsPage {
    * либо обновляйте текущую страницу (метод update) и виджет со счетами
    * */
   removeTransaction( id ) {
-    const confirmation = confirm('Вы действительно хотите удалить эту транзакцию?');
-    if (confirmation) {
-      Transaction.remove({ id: id }, (error, response) => {
-        if (error) {
-          console.error('Ошибка удаления транзакции: ', error);
-          return;
-        }
-        if(response.success) {
-          this.update()
+    if (confirm('Вы действительно хотите удалить эту транзакцию?')) {
+      Transaction.remove({ id: id }, (err, response) => {
+        if(response?.success) {
+          App.update()
         };
       });
     };
@@ -112,17 +100,15 @@ class TransactionsPage {
 
     Account.get(options.account_id, (error, accountResponse) => {
       if(error) {
-        console.error('Ошибка при получении названия счёта: ', error);
         return;
       }
-      if(accountResponse && accountResponse.success) {
+      if(accountResponse?.success) {
         this.renderTitle(accountResponse.data.name);
         Transaction.list({ account_id: options.account_id }, (error, transactionResponse) => {
           if (error) {
-            console.error('Ошибка при получении транзакций:', error);
             return;
           }
-          if (transactionResponse && transactionResponse.success) {
+          if (transactionResponse?.success) {
             this.renderTransactions(transactionResponse.data);
           }
         });
@@ -145,8 +131,7 @@ class TransactionsPage {
    * Устанавливает заголовок в элемент .content-title
    * */
   renderTitle(name){
-    const titleElement = this.element.querySelector('.content-title');
-    titleElement.textContent = name;
+    this.element.querySelector('.content-title').textContent = name;
   }
 
   /**
@@ -154,49 +139,82 @@ class TransactionsPage {
    * в формат «10 марта 2019 г. в 03:20»
    * */
   formatDate(date){
-    const options = { 
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }
-    return new Date(date).toLocaleString('ru-RU', options);
+    return new Date(date).toLocaleString('ru-RU', {
+      dateStyle: "long",
+      timeStyle: "short"
+    });
   }
 
   /**
    * Формирует HTML-код транзакции (дохода или расхода).
    * item - объект с информацией о транзакции
    * */
-  getTransactionHTML(item){
-    const formattedDate = this.formatDate(item.created_at);
-    const transactionType = item.type === 'income' ? 'transaction_income' : 'transaction_expense';
+getTransactionHTML(item) {
+  const formattedDate = this.formatDate(item.created_at);
+  const transactionType = item.type === 'income' ? 'transaction_income' : 'transaction_expense';
 
-    return `
-      <div class="transaction ${transactionType} row">
-        <div class="col-md-7 transaction__details">
-          <div class="transaction__icon">
-            <span class="fa fa-money fa-2x"></span>
-          </div>
-          <div class="transaction__info">
-            <h4 class="transaction__title">${item.name}</h4>    
-            <div class="transaction__date">${formattedDate}</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="transaction__summ">
-            ${item.sum} <span class="currency">₽</span>
-          </div>
-        </div>
-        <div class="col-md-2 transaction__controls">
-          <button class="btn btn-danger transaction__remove" data-id="${item.id}">
-            <i class="fa fa-trash"></i>  
-          </button>
-        </div>
-      </div>
-    `
-  }
+  const wrapper = document.createElement('div');
+  wrapper.className = `transaction ${transactionType} row`;
 
+  const detailsCol = document.createElement('div');
+  detailsCol.className = 'col-md-7 transaction__details';
+
+  const iconDiv = document.createElement('div');
+  iconDiv.className = 'transaction__icon';
+  const iconSpan = document.createElement('span');
+  iconSpan.className = 'fa fa-money fa-2x';
+  iconDiv.appendChild(iconSpan);
+
+  const infoDiv = document.createElement('div');
+  infoDiv.className = 'transaction__info';
+
+  const title = document.createElement('h4');
+  title.className = 'transaction__title';
+  title.textContent = item.name;
+
+  const dateDiv = document.createElement('div');
+  dateDiv.className = 'transaction__date';
+  dateDiv.textContent = formattedDate;
+
+  infoDiv.appendChild(title);
+  infoDiv.appendChild(dateDiv);
+
+  detailsCol.appendChild(iconDiv);
+  detailsCol.appendChild(infoDiv);
+
+  const sumCol = document.createElement('div');
+  sumCol.className = 'col-md-3';
+
+  const sumDiv = document.createElement('div');
+  sumDiv.className = 'transaction__summ';
+  sumDiv.textContent = item.sum + ' ';
+
+  const currencySpan = document.createElement('span');
+  currencySpan.className = 'currency';
+  currencySpan.textContent = '₽';
+
+  sumDiv.appendChild(currencySpan);
+  sumCol.appendChild(sumDiv);
+
+  const controlCol = document.createElement('div');
+  controlCol.className = 'col-md-2 transaction__controls';
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'btn btn-danger transaction__remove';
+  deleteBtn.dataset.id = item.id;
+
+  const trashIcon = document.createElement('i');
+  trashIcon.className = 'fa fa-trash';
+
+  deleteBtn.appendChild(trashIcon);
+  controlCol.appendChild(deleteBtn);
+
+  wrapper.appendChild(detailsCol);
+  wrapper.appendChild(sumCol);
+  wrapper.appendChild(controlCol);
+
+  return wrapper.outerHTML;
+}
   /**
    * Отрисовывает список транзакций на странице
    * используя getTransactionHTML

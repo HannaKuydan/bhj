@@ -9,7 +9,6 @@ class TransactionsWidget {
    * в свойство element.
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
-   * @param {HTMLElement} element - Элемент виджета.
    */
   constructor(element) {
     if (!element) {
@@ -27,24 +26,16 @@ class TransactionsWidget {
    * экземпляра окна.
    */
   registerEvents() {
-    const createIncomeBtn = this.element.querySelector('.create-income-button');
-    const createExpenseBtn = this.element.querySelector('.create-expense-button');
-
-    // Проверка на существование кнопок
-    if (createIncomeBtn) {
-      createIncomeBtn.addEventListener('click', () => {
-        App.getModal('newIncome').open();
+    this.element
+      .querySelector(".create-income-button")
+      .addEventListener("click", () => {
+        App.getModal("newIncome").open();
       });
-    } else {
-      console.error("Кнопка 'Новый доход' не найдена.");
-    }
 
-    if (createExpenseBtn) {
-      createExpenseBtn.addEventListener('click', () => {
-        App.getModal('newExpense').open();
+    this.element
+      .querySelector(".create-expense-button")
+      .addEventListener("click", () => {
+        App.getModal("newExpense").open();
       });
-    } else {
-      console.error("Кнопка 'Новый расход' не найдена.");
-    }
   }
 }

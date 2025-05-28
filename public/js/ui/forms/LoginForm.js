@@ -12,20 +12,16 @@ class LoginForm extends AsyncForm {
   onSubmit(data) {  
     User.login(data, (error, response) => {
       if (error) {
-        console.error('Ошибка авторизации: ', error);
         alert('Ошибка сети');
         return;
       }
 
       if(response.success) {
         this.element.reset();
-
         App.setState('user-logged');
-
         App.getModal('login').close();
         
       } else {
-        console.error(response.error);
         alert(response.error || 'Произошла ошибка авторизации');
       };
     });

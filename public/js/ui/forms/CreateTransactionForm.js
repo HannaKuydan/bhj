@@ -18,19 +18,20 @@ class CreateTransactionForm extends AsyncForm {
    * Обновляет в форме всплывающего окна выпадающий список
    * */
   renderAccountsList() {
-    Account.list({}, (error, response) => { 
+    Account.list(User.current(), (error, response) => {
       if (error) {
-        console.error('Ошибка получения счета: ', error);
-        alert('Ошибка сети');
+        alert("Ошибка сети");
         return;
       }
       if (response && response.success && response.data) {
-        const select = this.element.querySelector('.accounts-select');
+        const select = this.element.querySelector(".accounts-select");
 
         const optionsHtml = response.data.reduce((html, account) => {
-          return html + `<option value="${account.id}">${account.name}</option>`;
-        }, '');
-  
+          return (
+            html + `<option value="${account.id}">${account.name}</option>`
+          );
+        }, "");
+
         select.innerHTML = optionsHtml;
       }
     });
@@ -45,21 +46,19 @@ class CreateTransactionForm extends AsyncForm {
   onSubmit(data) {
     Transaction.create(data, (error, response) => {
       if (error) {
-        console.error('Ошибка транзакции: ', error);
-        alert('Ошибка сети');
+        alert("Ошибка сети");
         return;
       }
-      if(response.success) {
+      if (response.success) {
         App.update();
         this.element.reset();
 
-        const modalId = this.type === 'income' ? 'newIncome' : 'newExpense';
+        const modalId = this.type === "income" ? "newIncome" : "newExpense";
         const modal = App.getModal(modalId);
         modal.close();
       } else {
-        console.log(response.error);
-        alert(response.error || 'ошибка транзакции');
-      };
+        alert(response.error || "ошибка транзакции");
+      }
     });
-  };
+  }
 }

@@ -4,13 +4,13 @@
  * Имеет свойство URL, равное '/user'.
  * */
 class User {
-  static URL = '/user';
+  static URL = "/user";
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
   static setCurrent(user) {
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   /**
@@ -18,7 +18,7 @@ class User {
    * пользователе из локального хранилища.
    * */
   static unsetCurrent() {
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
   }
 
   /**
@@ -26,8 +26,7 @@ class User {
    * из локального хранилища
    * */
   static current() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : undefined;
+    return localStorage.getItem("user");
   }
 
   /**
@@ -36,18 +35,16 @@ class User {
    * */
   static fetch(callback) {
     createRequest({
-      url: this.URL + '/current',
-      method: 'GET',
+      url: `${this.URL}` + "/current",
+      method: "GET",
       callback: (error, response) => {
-        if (error) return callback(error, null);
-
         if (response.success) {
           this.setCurrent(response.user);
         } else {
           this.unsetCurrent();
         }
-        callback(null, response);
-      }
+        callback(err, response);
+      },
     });
   }
 
@@ -59,19 +56,16 @@ class User {
    * */
   static login(data, callback) {
     createRequest({
-      url: this.URL + '/login',
-      method: 'POST',
-      responseType: 'json',
+      url: this.URL + "/login",
+      method: "POST",
+      responseType: "json",
       data,
-      callback: (error, response) => {
-        if (error) return callback(error, null);
-
-        if (response.success) {
-          console.log("вход выполнен", response);
+      callback: (err, response) => {
+        if (response & response.success) {
           this.setCurrent(response.user);
         }
-        callback(null, response);
-      }
+        callback(err, response);
+      },
     });
   }
 
@@ -83,18 +77,15 @@ class User {
    * */
   static register(data, callback) {
     createRequest({
-      url: this.URL + '/register',
-      method: 'POST',
+      url: `${this.URL}` + "/register",
+      method: "POST",
       data,
-      callback: (error, response) => {
-        if (error) return callback(error, null);
-
+      callback: (err, response) => {
         if (response.success) {
-          console.log("регистрация выполнена", response);
           this.setCurrent(response.user);
         }
-        callback(null, response);
-      }
+        callback(err, response);
+      },
     });
   }
 
@@ -104,18 +95,15 @@ class User {
    * */
   static logout(callback) {
     createRequest({
-      url: this.URL + '/logout',
-      method: 'POST',
-      data: null,
-      callback: (error, response) => {
-        if (error) return callback(error, null);
-        
+      url: `${this.URL}` + "/logout",
+      method: "POST",
+      data,
+      callback: (err, response) => {
         if (response.success) {
-          console.log("выход выполнен", response);
           this.unsetCurrent();
         }
-        callback(null, response); 
-      }
+        callback(err, response);
+      },
     });
-  };
+  }
 }

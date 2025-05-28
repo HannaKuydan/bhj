@@ -9,7 +9,6 @@ class UserWidget {
    * в свойство element.
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
-   * @param {HTMLElement} element - Элемент виджета.
    */
   constructor(element) {
     if (!element) {
@@ -29,18 +28,10 @@ class UserWidget {
    * очищает поле с именем пользователя.
    */
   update() {
-    const currentUser = User.current();
-    const userNameElement = this.element.querySelector(".user-name");
-
-    if (!userNameElement) {
-      console.error("Элемент '.user-name' не найден.");
-      return;
-    }
-
-    if (currentUser) {
-      userNameElement.textContent = currentUser.name;
+    if (User.current()) {
+      this.element.querySelector(".user-name").textContent = User.current().name;
     } else {
-      userNameElement.textContent = ""; // Очистка имени пользователя при выходе
+       this.element.querySelector(".user-name").textContent = ""; // Очистка имени пользователя при выходе
     }
   }
 }
