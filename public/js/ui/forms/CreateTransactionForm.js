@@ -50,12 +50,10 @@ class CreateTransactionForm extends AsyncForm {
         return;
       }
       if (response.success) {
-        App.update();
         this.element.reset();
+        App.update();
 
-        const modalId = this.type === "income" ? "newIncome" : "newExpense";
-        const modal = App.getModal(modalId);
-        modal.close();
+       App.getModal(this.element.closest('.modal').dataset.modalId).close();
       } else {
         alert(response.error || "ошибка транзакции");
       }
