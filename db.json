@@ -11,6 +11,12 @@
       "email": "t@t.t",
       "password": "test",
       "id": "1e3im3btcmaz3g4o2"
+    },
+    {
+      "name": "Pig",
+      "email": "p@p.ru",
+      "password": "smallpig",
+      "id": "1e3im3j58mbj6vk9m"
     }
   ],
   "accounts": [
@@ -33,6 +39,36 @@
       "name": "t",
       "user_id": "1e3im3btcmaz3g4o2",
       "id": "1e3im3a78maz3m9hz"
+    },
+    {
+      "name": "На Зубы",
+      "user_id": "1e3im3j58mbj6vk9m",
+      "id": "1e3im346cmbj6yn2p"
+    },
+    {
+      "name": "на Зубы",
+      "user_id": "1e3im3j58mbj6vk9m",
+      "id": "1e3im3574mbj71wpw"
+    },
+    {
+      "name": "tест",
+      "user_id": "1e3im3j58mbj6vk9m",
+      "id": "1e3im35bsmbj72pm3"
+    },
+    {
+      "name": "тест",
+      "user_id": "1e3im3j58mbj6vk9m",
+      "id": "1e3im3kdsmbj74aor"
+    },
+    {
+      "name": "na zubi",
+      "user_id": "1e3im3j58mbj6vk9m",
+      "id": "1e3im3jh4mbj7g1n1"
+    },
+    {
+      "name": "sdsds",
+      "user_id": "1e3im3j58mbj6vk9m",
+      "id": "1e3im32cgmbj7vrac"
     }
   ],
   "transactions": [
@@ -179,6 +215,15 @@
       "account_id": "1e3im3a78maz3m9hz",
       "user_id": "1e3im3btcmaz3g4o2",
       "created_at": "2025-05-22T08:19:57.645Z"
+    },
+    {
+      "id": "1e3im31vcmbj7mztk",
+      "type": "income",
+      "name": "gifts",
+      "sum": 1000000000000000,
+      "account_id": "1e3im346cmbj6yn2p",
+      "user_id": "1e3im3j58mbj6vk9m",
+      "created_at": "2025-06-05T10:05:03.319Z"
     }
   ]
 }

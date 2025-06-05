@@ -31,7 +31,7 @@ class AccountsWidget {
    */
   registerEvents() {
     this.element.addEventListener("click", (event) => {
-      e.preventDefault();
+      event.preventDefault();
 
       if (event.target.closest(".create-account")) {
         App.getModal("createAccount").open();
@@ -109,9 +109,8 @@ class AccountsWidget {
     a.appendChild(nameSpan)
     a.append(' / ')
     a.appendChild(sumSpan)
-
-    localStorage.appendChild(a)
-    return li.outerHTML
+    li.appendChild(a)
+    return li
   }
 
 
@@ -123,7 +122,7 @@ class AccountsWidget {
    */
   renderItem(data) {
     data.forEach((item) => {
-      this.element.insertAdjacentHTML("beforeend", this.getAccountHTML(item));
+      this.element.appendChild(this.getAccountHTML(item));
     });
   }
 }
